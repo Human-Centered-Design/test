@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Data Selfie App</h1>
+    <p>
+      latitude: <span id="latitude"></span>&deg <br>
+      longitude: <span id="longitude"></span>&deg
+    </p>
+    <label for="mood">enter your mood</label>
+    <input id="mood" value="rainbow" />
+    <button id="submit">submit</button>
+    <script>
+    let lat, lon;
+    document.getElementById('submit').addEventListener('click', async event => {
+      const mood = document.getElementById('mood').value;
+      const data = { lat, lon, mood };
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }
+      const response = await fetch('/api', options);
+      const responseData = await response.json();
+      console.log(responseData);
+    })
+
+    if ("geolocation" in navigator) {
+      console.log('geolocation available');
+      navigator.geolocation.getCurrentPosition(async position => {
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+
+        document.getElementById('latitude').textContent = lat;
+        document.getElementById('longitude').textContent = lon;
+
+        // console.log(position.coords);
+      });
+    } else {
+      console.log('geolocation not available');
+    }
+    </script>
+  </body>
+</html>
